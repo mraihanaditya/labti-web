@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.btn-white {
+  background-color: white; /* Warna latar awal */
+  color: black; /* Warna teks awal */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transisi halus */
+}
+
+.btn-white:hover {
+  transform: translateY(-3px); /* Efek menonjol */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Bayangan lebih besar saat hover */
+  background-color: rgb(57, 219, 248);
+}

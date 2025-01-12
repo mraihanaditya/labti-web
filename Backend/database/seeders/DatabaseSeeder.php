@@ -14,6 +14,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
+        // Buat data manual untuk tabel users
+        \App\Models\User::create([
+            'name' => 'Azra',
+            'email' => 'azra@gmail.com',
+            'password' => bcrypt('123'), // Enkripsi password
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Raihan',
+            'email' => 'raihan@gmail.com',
+            'password' => bcrypt('123'), // Enkripsi password
+        ]);
+        
+        \App\Models\User::create([
+            'name' => 'Zidan',
+            'email' => 'zidan@gmail.com',
+            'password' => bcrypt('123'), // Enkripsi password
+        ]);
     }
 }
