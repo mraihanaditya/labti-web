@@ -18,19 +18,19 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::create([
             'name' => 'Azra',
             'email' => 'azra@gmail.com',
-            'password' => bcrypt('123'), // Enkripsi password
+            'password' => bcrypt('123'), 
         ]);
 
         \App\Models\User::create([
             'name' => 'Raihan',
             'email' => 'raihan@gmail.com',
-            'password' => bcrypt('123'), // Enkripsi password
+            'password' => bcrypt('123'), 
         ]);
         
         \App\Models\User::create([
             'name' => 'Zidan',
             'email' => 'zidan@gmail.com',
-            'password' => bcrypt('123'), // Enkripsi password
+            'password' => bcrypt('123'), 
         ]);
     }
 }

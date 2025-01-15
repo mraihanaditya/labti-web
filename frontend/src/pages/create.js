@@ -1,50 +1,84 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import http from '../http'
+import http from "../http";
+import "../Home.css"; // Gunakan CSS yang sama untuk menjaga konsistensi
 
 export default function Create() {
-    const navigate = useNavigate();
-    const [inputs,setInputs] = useState({});
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs(values => ({...values,[name]:value}))
-    }
+  const [inputs, setInputs] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-    const submitForm = () =>{
-        http.post('/users',inputs).then((res)=>{
-            navigate('/');
-        })
-    }
-    return (
-        <div>
-            <h2>New User</h2>
-            <div className="row">
-                <div className="col-sm-6">
-                    <div className="card p-4">
-                        <label>Name</label>
-                        <input type="text" name="name" className="form-control mb-2"
-                                value={inputs.name || ''}
-                                onChange={handleChange}
-                             />
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
 
-                        <label>Email</label>
-                        <input type="email" name="email" className="form-control mb-2"
-                            value={inputs.email || ''}
-                            onChange={handleChange}
-                        />
+  const submitForm = () => {
+    http.post("/users", inputs).then((res) => {
+      alert("User created successfully!");
+      setInputs({ name: "", email: "", password: "" }); // Reset form
+    });
+  };
 
-                        <label>Password</label>
-                        <input type="password" name="password" className="form-control mb-2"
-                            value={inputs.password || ''}
-                            onChange={handleChange}
-                             />
-
-                        <button type="button" onClick={submitForm} className="btn btn-info mt-2">Create</button>
-                    </div>
-                </div>
+  return (
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Tambah User Baru</h2>
+      <div className="row justify-content-center">
+        <div className="col-sm-6">
+          <div className="card shadow-sm rounded p-4">
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Nama
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="form-control"
+                value={inputs.name}
+                onChange={handleChange}
+                placeholder="Masukkan nama"
+              />
             </div>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="form-control"
+                value={inputs.email}
+                onChange={handleChange}
+                placeholder="Masukkan email"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="form-control"
+                value={inputs.password}
+                onChange={handleChange}
+                placeholder="Masukkan password"
+              />
+            </div>
+            <button
+              type="button"
+              className="btn btn-info btn-sm w-100 mt-2"
+              onClick={submitForm}
+            >
+              Buat User
+            </button>
+          </div>
         </div>
-
-    )
+      </div>
+    </div>
+  );
 }
