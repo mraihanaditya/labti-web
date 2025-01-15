@@ -8,91 +8,80 @@ use App\Models\User;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Fetch all users in descending order of creation.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        return response()->json(User::latest()->get());
+        $users = User::latest()->get();
+        return response()->json($users, 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a new user into the database.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=> bcrypt($request->password)
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
         ]);
-        return response()->json('successfully created');
+
+        $validatedData['password'] = bcrypt($validatedData['password']);
+        $user = User::create($validatedData);
+
+        return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
     }
 
     /**
-     * Display the specified resource.
+     * Retrieve a specific user by ID.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function edit($id)
     {
-        return response()->json(User::whereId($id)->first());
+        $user = User::findOrFail($id);
+        return response()->json($user, 200);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update an existing user's information.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        $user = User::whereId($id)->first();
+        $user = User::findOrFail($id);
 
-        $user->update([
-            'name'=>$request->name,
-            'email'=>$request->email,
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => "required|email|unique:users,email,{$id}",
         ]);
-        return response()->json('success');
+
+        $user->update($validatedData);
+
+        return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a user from the database.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        User::whereId($id)->first()->delete();
+        $user = User::findOrFail($id);
+        $user->delete();
 
-        return response()->json('success');
+        return response()->json(['message' => 'User deleted successfully'], 200);
     }
 }
